@@ -28,7 +28,7 @@ public class Configuration
         this.listSyncConfigs = this.builder.
             comment("This list holds config files that should be synced with server.").
             comment("Supported Values: `json` files").
-            define("syncConfigs",
+            defineList("syncConfigs",
                 Arrays.asList("researches.json",
                     "researches_groups.json",
                     "researches_groups_styles.json",
