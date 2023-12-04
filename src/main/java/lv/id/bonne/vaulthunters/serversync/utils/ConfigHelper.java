@@ -34,7 +34,15 @@ public class ConfigHelper
 
                 if (fieldObject instanceof Config config)
                 {
-                    CONFIG_MAP.put(config.getName() + ".json", field.getName());
+                    CONFIG_MAP.put(config.getName(), field.getName());
+                }
+                else if (fieldObject instanceof Map map)
+                {
+                    for (Object key : map.keySet())
+                    {
+                        Config configValue = (Config) map.get(key);
+                        CONFIG_MAP.put(configValue.getName(), field.getName());
+                    }
                 }
             }
             catch (IllegalAccessException ignored)

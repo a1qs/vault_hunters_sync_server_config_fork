@@ -8,6 +8,8 @@ package lv.id.bonne.vaulthunters.serversync.networking;
 
 
 import java.lang.reflect.Field;
+import java.util.Map;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -30,13 +32,19 @@ public class GenericConfigSyncDescriptor
      * The encoder for this packet.
      */
     public static final BiConsumer<GenericConfigSyncDescriptor, FriendlyByteBuf> ENCODER =
-        (message, buffer) -> buffer.writeByteArray(Compress.compressString(message.configContent)).writeUtf(message.configName);
+        (message, buffer) -> buffer.writeByteArray(
+            Compress.compressString(message.configContent)).
+            writeUtf(message.configName).
+            writeUtf(message.parameter);
 
     /**
      * The decoder for this packet.
      */
     public static final Function<FriendlyByteBuf, GenericConfigSyncDescriptor> DECODER =
-        buffer -> new GenericConfigSyncDescriptor(Compress.decompress(buffer.readByteArray()), buffer.readUtf());
+        buffer -> new GenericConfigSyncDescriptor(
+            Compress.decompress(buffer.readByteArray()),
+            buffer.readUtf(),
+            buffer.readUtf());
 
     /**
      * The consumer for this packet that handles it.
@@ -58,14 +66,20 @@ public class GenericConfigSyncDescriptor
      */
     private final String configName;
 
+    /**
+     * The item name.
+     */
+    private final String parameter;
+
 
     /**
      * The constructor for this packet.
      */
-    public GenericConfigSyncDescriptor(String configContent, String configName)
+    public GenericConfigSyncDescriptor(String configContent, String configName, String parameter)
     {
         this.configContent = configContent;
         this.configName = configName;
+        this.parameter = parameter;
     }
 
 
@@ -84,10 +98,37 @@ public class GenericConfigSyncDescriptor
 
                 if (object instanceof Config config)
                 {
+                    // Remove config from config set.
                     ModConfigs.CONFIGS.remove(config);
+                    // Read config from JSON
                     config = ((IConfigReadFromString) config).decodeFromJson(this.configContent);
+                    // Replace field value with new config.
                     field.set(ModConfigs.class, config);
+                    // Add config to the config set.
                     ModConfigs.CONFIGS.add(config);
+                }
+                else if (object instanceof Map)
+                {
+                    // I think there is no work around object casting.
+                    Map<Object, Config> map = (Map<Object, Config>) object;
+
+                    Optional<Object> optionalKey = map.keySet().stream().
+                        filter(key -> key.toString().equals(this.parameter)).
+                        findFirst();
+
+                    optionalKey.ifPresent(key -> {
+                        Config configValue = map.get(key);
+                        // Remove config from config set.
+                        ModConfigs.CONFIGS.remove(configValue);
+
+                        // Read config from JSON
+                        configValue = ((IConfigReadFromString) configValue).decodeFromJson(this.configContent);
+
+                        // Replace config in map
+                        map.replace(key, configValue);
+                        // Add config to the config set.
+                        ModConfigs.CONFIGS.add(configValue);
+                    });
                 }
             }
             catch (NoSuchFieldException | IllegalAccessException e)
