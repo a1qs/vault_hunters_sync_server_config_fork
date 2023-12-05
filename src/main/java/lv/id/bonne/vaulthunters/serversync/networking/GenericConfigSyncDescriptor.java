@@ -52,6 +52,7 @@ public class GenericConfigSyncDescriptor
     public static final BiConsumer<GenericConfigSyncDescriptor, Supplier<NetworkEvent.Context>> CONSUMER =
         (message, context) ->
         {
+            ServerConfigSyncMod.LOGGER.info("Pocket received. Start handling.");
             NetworkEvent.Context cont = context.get();
             message.handle(cont);
         };
@@ -91,6 +92,8 @@ public class GenericConfigSyncDescriptor
     {
         context.enqueueWork(() ->
         {
+            ServerConfigSyncMod.LOGGER.info("Start processing config: " + this.configName);
+
             try
             {
                 Field field = ModConfigs.class.getField(this.configName);
@@ -106,6 +109,8 @@ public class GenericConfigSyncDescriptor
                     field.set(ModConfigs.class, config);
                     // Add config to the config set.
                     ModConfigs.CONFIGS.add(config);
+
+                    ServerConfigSyncMod.LOGGER.info("Config Updated!");
                 }
                 else if (object instanceof Map)
                 {
@@ -128,6 +133,8 @@ public class GenericConfigSyncDescriptor
                         map.replace(key, configValue);
                         // Add config to the config set.
                         ModConfigs.CONFIGS.add(configValue);
+
+                        ServerConfigSyncMod.LOGGER.info("Config Updated!");
                     });
                 }
             }
