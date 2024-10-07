@@ -20,25 +20,11 @@ import lv.id.bonne.vaulthunters.serversync.utils.IConfigReadFromString;
  * The type Mixin config.
  */
 @Mixin(value = Config.class, remap = false)
-public class MixinConfig implements IConfigReadFromString
+public abstract class ServerMixinConfig implements IConfigReadFromString
 {
     @Shadow
     @Final
-    private static Gson GSON;
-
-
-    /**
-     * This method decodes Config from JSON.
-     * @param string the string
-     * @return Config file decoded from String
-     * @param <T>
-     */
-    @Override
-    public <T extends Config> T decodeFromJson(String string)
-    {
-        Config config = GSON.fromJson(string, ((Config) ((Object) this)).getClass());
-        return (T) config;
-    }
+    public static Gson GSON;
 
 
     /**

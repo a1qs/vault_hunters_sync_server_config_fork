@@ -18,13 +18,11 @@ public interface IConfigReadFromString
     /**
      * Read from string t.
      *
-     * @param <T> the type parameter
      * @param string the string
      * @return the t
      */
-    default <T extends Config> T decodeFromJson(String string)
+    default void decodeFromJson(String string)
     {
-        return null;
     }
 
 

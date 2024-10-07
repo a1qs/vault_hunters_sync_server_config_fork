@@ -7,7 +7,9 @@
 package lv.id.bonne.vaulthunters.serversync.utils;
 
 
+import org.apache.commons.io.FileUtils;
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.*;
 
@@ -130,6 +132,29 @@ public class ConfigHelper
 
         player.sendMessage(new TextComponent("Client synchronized with server configs.").
             withStyle(ChatFormatting.GRAY), ChatType.SYSTEM, net.minecraft.Util.NIL_UUID);
+    }
+
+
+    /**
+     * This method removes server config folder.
+     */
+    public static void clearServerConfigs()
+    {
+        String root = "config%s%s%s%s".formatted(File.separator, "the_vault", File.separator, "server");
+
+        File serverConfigs = new File(root);
+
+        if (serverConfigs.exists() && serverConfigs.isDirectory())
+        {
+            try
+            {
+                FileUtils.deleteDirectory(serverConfigs);
+            }
+            catch (IOException e)
+            {
+                ServerConfigSyncMod.LOGGER.error("Failed to remove server configs: " + e.getMessage());
+            }
+        }
     }
 
 

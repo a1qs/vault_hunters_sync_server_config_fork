@@ -10,6 +10,7 @@ package lv.id.bonne.vaulthunters.serversync.proxy.client;
 import iskallia.vault.init.ModConfigs;
 import lv.id.bonne.vaulthunters.serversync.ServerConfigSyncMod;
 import lv.id.bonne.vaulthunters.serversync.proxy.ISyncModProxy;
+import lv.id.bonne.vaulthunters.serversync.utils.ConfigHelper;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -28,6 +29,7 @@ public class SyncModClientProxy implements ISyncModProxy
     {
         ISyncModProxy.super.init();
         MinecraftForge.EVENT_BUS.register(this);
+        ConfigHelper.clearServerConfigs();
     }
 
 
@@ -41,6 +43,7 @@ public class SyncModClientProxy implements ISyncModProxy
         if (event.getPlayer() != null && event.getConnection() != null)
         {
             ServerConfigSyncMod.LOGGER.info("Reloading config files");
+            ConfigHelper.clearServerConfigs();
             ModConfigs.register();
         }
     }

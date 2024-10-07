@@ -103,12 +103,14 @@ public class GenericConfigSyncDescriptor
                 {
                     // Remove config from config set.
                     ModConfigs.CONFIGS.remove(config);
+                    config.onUnload();
+
                     // Read config from JSON
-                    config = ((IConfigReadFromString) config).decodeFromJson(this.configContent);
+                    ((IConfigReadFromString) config).decodeFromJson(this.configContent);
+                    config = config.readConfig();
+
                     // Replace field value with new config.
                     field.set(ModConfigs.class, config);
-                    // Add config to the config set.
-                    ModConfigs.CONFIGS.add(config);
 
                     ServerConfigSyncMod.LOGGER.info("Config Updated!");
                 }
@@ -125,14 +127,15 @@ public class GenericConfigSyncDescriptor
                         Config configValue = map.get(key);
                         // Remove config from config set.
                         ModConfigs.CONFIGS.remove(configValue);
+                        configValue.onUnload();
 
                         // Read config from JSON
-                        configValue = ((IConfigReadFromString) configValue).decodeFromJson(this.configContent);
+                        ((IConfigReadFromString) configValue).decodeFromJson(this.configContent);
+
+                        configValue = configValue.readConfig();
 
                         // Replace config in map
                         map.replace(key, configValue);
-                        // Add config to the config set.
-                        ModConfigs.CONFIGS.add(configValue);
 
                         ServerConfigSyncMod.LOGGER.info("Config Updated!");
                     });
