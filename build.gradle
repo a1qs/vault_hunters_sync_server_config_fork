@@ -156,14 +156,20 @@ dependencies {
 //    implementation fg.deobf("curse.maven:refined-storage-243076:4392829")
 //    implementation fg.deobf("curse.maven:mekanism-268560:3875976")
 //    implementation fg.deobf("curse.maven:simple-storage-network-268495:3868680")
-//
-//    implementation fg.deobf("curse.maven:architects-palette-433862:4498424")
-//    implementation fg.deobf("curse.maven:curios-309927:4418032")
-//    implementation fg.deobf("curse.maven:autoreglib-250363:3642382")
-//    implementation fg.deobf("curse.maven:sophisticated-core-618298:4665730")
-//    implementation fg.deobf("curse.maven:sophisticated-backpacks-422301:4637292")
-//    implementation fg.deobf("curse.maven:sophisticated-backpacks-vault-hunters-edition-696425:4287544")
-//    implementation fg.deobf("curse.maven:configured-457570:4462832")
+
+    implementation fg.deobf("curse.maven:architects-palette-433862:4498424")
+    implementation fg.deobf("curse.maven:curios-309927:4418032")
+    implementation fg.deobf("curse.maven:autoreglib-250363:3642382")
+    implementation fg.deobf("curse.maven:quark-243121:3840125")
+    implementation fg.deobf("curse.maven:sophisticated-core-618298:4665730")
+    implementation fg.deobf("curse.maven:sophisticated-backpacks-422301:4637292")
+    implementation fg.deobf("curse.maven:sophisticated-backpacks-vault-hunters-edition-696425:4287544")
+    implementation fg.deobf("curse.maven:configured-457570:4462832")
+    implementation fg.deobf("curse.maven:geckolib-388172:4181370")
+    implementation fg.deobf("curse.maven:jei-238222:4593548")
+    implementation fg.deobf("curse.maven:multi-world-borders-unofficial-961971:5376292")
+
+    implementation files('libs/vaultadditions-1.1.0.jar')
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
@@ -200,7 +206,7 @@ tasks.named('jar', Jar).configure {
     }
 
     // This is the preferred method to reobfuscate your jar file
-    //finalizedBy 'reobfJar'
+    finalizedBy 'reobfJar'
 }
 
 tasks.withType(JavaCompile).configureEach {

@@ -60,17 +60,17 @@ public class GenericConfigSyncDescriptor
     /**
      * The config content.
      */
-    private final String configContent;
+    protected final String configContent;
 
     /**
      * The config name.
      */
-    private final String configName;
+    protected final String configName;
 
     /**
      * The item name.
      */
-    private final String parameter;
+    protected final String parameter;
 
 
     /**

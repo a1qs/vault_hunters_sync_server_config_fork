@@ -36,6 +36,21 @@ public class Configuration
                 entry -> entry instanceof String value &&
                     value.endsWith(".json"));
 
+        this.listCustomClassFiles = this.builder.
+                comment("This list holds the class files that contain the custom config objects that get registered.").
+                comment("Example: io.github.a1qs.vaultadditions.util.MiscUtil").
+                defineList("listOfClassFiles",
+                        List.of("com.examplepackage.util.ExampleClass"),
+                        entry -> entry instanceof String);
+
+        this.listCustomSyncConfigs = this.builder.
+                comment("This list holds config files that should be synced with server.").
+                comment("Supported Values: `json` files").
+                defineList("syncCustomConfigs",
+                        List.of("example.json"),
+                        entry -> entry instanceof String value &&
+                                value.endsWith(".json"));
+
         Configuration.GENERAL_SPEC = this.builder.build();
     }
 
@@ -48,6 +63,16 @@ public class Configuration
     public ForgeConfigSpec.ConfigValue<List<? extends String>> getListSyncConfigs()
     {
         return this.listSyncConfigs;
+    }
+
+    public ForgeConfigSpec.ConfigValue<List<? extends String>> getListCustomClassFiles()
+    {
+        return this.listCustomClassFiles;
+    }
+
+    public ForgeConfigSpec.ConfigValue<List<? extends String>> getListCustomSyncConfigs()
+    {
+        return this.listCustomSyncConfigs;
     }
 
 
@@ -65,6 +90,16 @@ public class Configuration
      * The config value for the list of configs to sync.
      */
     private final ForgeConfigSpec.ConfigValue<List<? extends String>> listSyncConfigs;
+
+    /**
+     * The config value for the list of configs outside the Vault Configs to sync.
+     */
+    private final ForgeConfigSpec.ConfigValue<List<? extends String>> listCustomClassFiles;
+
+    /**
+     * The config value for the list of configs outside the Vault Configs to sync.
+     */
+    private final ForgeConfigSpec.ConfigValue<List<? extends String>> listCustomSyncConfigs;
 
     /**
      * The general config spec.
